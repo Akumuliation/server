@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/postgres
+  server:
+    depends_on:
+      - database
+    build: .
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=database
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$DB_DOCKER_PORT
+    #keep open the terminal after building container
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
