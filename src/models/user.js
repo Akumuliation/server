@@ -45,6 +45,8 @@ export class User extends Model {
     );
 
     User.authenticate = function(password, user) {
+      if(!user)  return false;
+
       return bcrypt.compareSync(password, user.password);
     };
 

@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Express</title>
 </head>
+
 <body>
   <h1>Express</h1>
   <p>Welcome to Express</p>
+  <button id="login">login</button>
+  <script>document.querySelector('#login').addEventListener('click', function () {
+      fetch('http://localhost:8080/api/v1/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ "email": "akumuliation@gmail.com", "password": "test1234" })
+      })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(e => console.log(e))
+    })</script>
 </body>
+
 </html>
