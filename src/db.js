@@ -12,10 +12,10 @@ export const db = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     timezone: process.env.TZ,
   },
   pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    idle: dbConfig.pool.idle,
+    max: dbConfig.pool.max, // Максимальна кількість з'єднань у пулі
+    min: dbConfig.pool.min, // Мінімальна кількість з'єднань у пулі
+    acquire: dbConfig.pool.acquire, // Максимальний час, протягом якого пул намагатиметься отримати з'єднання перед викиданням помилки
+    idle: dbConfig.pool.idle, // Максимальний час, протягом якого з'єднання може залишатися неактивним у пулі
   },
 });
 
@@ -24,7 +24,7 @@ db.authenticate().then(() => {
 
   return db.sync({
     // force: false,
-    force: true,
+    force: true, // Синхронізація моделей з базою даних
   }).then(() => {
     console.log('Re-sync database.');
   });

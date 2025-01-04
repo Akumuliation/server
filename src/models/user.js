@@ -19,21 +19,21 @@ export class User extends Model {
           allowNull: false,
         },
         email: {
-          type: DataTypes.STRING(255),
-          allowNull: false,
-          unique: true,
+          type: DataTypes.STRING(255), // Тип даних - рядок довжиною до 255 символів
+          allowNull: false, // Поле не може бути порожнім
+          unique: true, // Значення повинно бути унікальним
         },
         birthday: {
           type: DataTypes.DATE,
         },
         password: {
-          type: DataTypes.STRING(64),
-          allowNull: false,
-          len: [8,64],
+          type: DataTypes.STRING(64), // Тип даних - рядок довжиною до 64 символів
+          allowNull: false, // Поле не може бути порожнім
+          len: [8,64], // Довжина пароля повинна бути від 8 до 64 символів
           // validate: {
           //   is: /^[0-9a-f]{64}$/i,
           // },
-          set(value) {
+          set(value) { // Метод для хешування пароля перед збереженням
             const salt = bcrypt.genSaltSync();
             this.setDataValue('password', bcrypt.hashSync(value, salt));
           },
@@ -44,8 +44,8 @@ export class User extends Model {
       },
     );
 
-    User.authenticate = function(password, user) {
-      if(!user)  return false;
+    User.authenticate = function(password, user) { // Метод для аутентифікації користувача
+      if(!user) return false; // Якщо користувача не знайдено, повернути false
 
       return bcrypt.compareSync(password, user.password);
     };

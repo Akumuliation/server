@@ -27,5 +27,5 @@ app.set('views', publicPath);
 app.use(express.static(publicPath));
 app.use(logger('dev'));
 app.use(rid({
-  headerName: 'X-Request-ID'
+  headerName: 'X-Request-ID' // Використання connect-rid для генерації унікальних ідентифікаторів запитів
 }));
