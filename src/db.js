@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import dbConfig from './config/db.config.js';
+import { dbConfig } from './config/index.js';
 
 export const db = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
