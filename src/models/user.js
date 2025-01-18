@@ -35,7 +35,7 @@ export class User extends Model {
           // },
           set(value) { // Метод для хешування пароля перед збереженням
             const salt = bcrypt.genSaltSync();
-            this.setDataValue('password', bcrypt.hashSync(value, salt));
+            this.setDataValue('password', bcrypt.hashSync(value, salt));// Хешування пароля
           },
         },
       },
