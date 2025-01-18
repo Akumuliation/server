@@ -7,11 +7,11 @@ export const sendEmail = ({ to, subject, text, html }) => new Promise((resolve, 
       transporter.sendMail({
             from: 'youremail@gmail.com',
             to, subject, text, html,
-      }, function (error, info) {
-            if (error) {
-                  reject(error);
-            } else {
-                  resolve(info);
+      }, function (error, info) { // Перевіряємо наявність помилки
+            if (error) { // Якщо помилка є
+                  reject(error); // Відправляємо помилку
+            } else { // Якщо помилки немає
+                  resolve(info); // Відправляємо об'єкт з інформацією про відправку
             }
       });
 })
