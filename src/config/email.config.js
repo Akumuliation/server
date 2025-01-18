@@ -1,15 +1,11 @@
 // Налаштування конфігурації електронної пошти
+// https://mailtrap.io/blog/send-emails-with-nodejs/
 export const emailConfig = {
-      service: 'gmail',
-      // host: "smtp.gmail.com", // Хост SMTP сервера
-      // port: 587, // Порт SMTP сервера
-      // secure: false,
-      auth: {
-            type: 'OAuth2', // Тип аутентифікації
-            user: process.env.MAIL_USERNAME,   // Ім'я користувача облікового запису електронної пошти
-            pass: process.env.MAIL_PASSWORD,   // Пароль облікового запису електронної пошти
-            clientId: process.env.MAIL_OAUTH_CLIENTID,     // Ідентифікатор клієнта OAuth2
-            clientSecret: process.env.MAIL_OAUTH_CLIENT_SECRET,   // Секрет клієнта OAuth2
-            refreshToken: process.env.MAIL_OAUTH_REFRESH_TOKEN    // Токен оновлення OAuth2
-      }
-}
+  host: process.env.MAIL_HOST, // Хост SMTP сервера
+  port: process.env.MAIL_PORT, // Порт SMTP сервера
+  secure: false,
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASSWRD,
+  },
+};
