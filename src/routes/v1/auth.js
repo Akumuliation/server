@@ -18,7 +18,7 @@ router.post('/login', isNotAuthorized, function(req, res) { // Маршрут д
         generateToken(user.id, '24h'), // Генерація refresh token
       ]).then(([accessToken, refreshToken]) => {
         res.json({ accessToken, refreshToken }); // Відправка токенів у відповідь
-      }).catch((error) => {
+      }).catch(() => {
         res.status(500).json({ message: 'Unable to generate token' }); // Помилка генерації токенів
       });
     } else {
