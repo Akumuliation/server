@@ -6,6 +6,7 @@ export const emailConfig = {
   secure: false,
   auth: {
     user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWRD,
+    pass: process.env.MAIL_PASSWORD,
   },
+  tls : { rejectUnauthorized: false }
 };

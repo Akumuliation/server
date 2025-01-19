@@ -26,6 +26,10 @@ export class User extends Model {
         birthday: {
           type: DataTypes.DATE,
         },
+        approved: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
         password: {
           type: DataTypes.STRING(64), // Тип даних - рядок довжиною до 64 символів
           allowNull: false, // Поле не може бути порожнім

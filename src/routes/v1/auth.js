@@ -1,5 +1,5 @@
 import express from 'express';
-import { isNotAuthorized, isAuthorized, generateToken, sendEmail } from '../../helpers/index.js';
+import { isNotAuthorized, isAuthorized, generateToken, sendEmail, parseToken } from '../../helpers/index.js';
 import Models from '../../models/index.js';
 
 const router = express.Router();
@@ -40,15 +40,30 @@ router.post('/create', isNotAuthorized, function (req, res, next) { // Марш�
   const { email, password, first_name, last_name, birthday } = req.body; // Отримання email та пароля з тіла запиту
 
   Models.User.create({ email, password, first_name, last_name, birthday }).then((user) => { // Створення користувача
-    sendEmail({
+    generateToken({ email }, '1h')
+    .then((token) => sendEmail({
       to: email,
       subject: 'Welcome to our service',
-      text: 'You have successfully registered on our service',
-    }).then(() => console.log('Email sent successfully')).catch((error) => console.error('Unable to send email:', error));
+      text: 'You have successfully registered on our service. Please, approve your email by following the link: http://localhost:8080/api/v1/auth/approve-email?token=' + token,
+    }))
+    .then(() => console.log('Email sent successfully'))
+    .catch((error) => console.error('Unable to send email:', error));
+
     res.json({ message: 'User created successfully' }); // Користувача створено успішно
   }).catch((error) => {
-    res.status(500).json({ message: 'Unable to create user', details: error.errors.map((error) => error.message)  }); // Помилка створення користувача
+    res.status(500).json({ message: 'Unable to create user', details: error.errors.map((error) => error.message) }); // Помилка створення користувача
   });
+});
+
+router.get('/approve-email', isNotAuthorized, function (req, res, next) { // Маршрут для підтвердження користувача
+  const { token } = req.params;
+  console.log(`token: ${token}`, req.params);
+  parseToken(token)
+    .then((decodedToken) => Models.User.update({ approved: true }, { where: { email } }))
+    .then(() => res.json({ message: 'User approved successfully' }))
+    .catch((error) => {
+      res.status(500).json({ message: 'Unable to approve user' });
+    });
 });
 
 export const auth = router;
