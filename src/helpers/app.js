@@ -12,7 +12,7 @@ const publicPath = path.join(__dirname, '../../public');
 export const app = express();
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -33,11 +33,11 @@ app.use(rid({
 
 
 
-/* 
-Код імпортує бібліотеки express, cors, path, cookie-parser, 
+/*
+Код імпортує бібліотеки express, cors, path, cookie-parser,
 створює новий додаток express,
 налаштовує middleware для обробки запитів,
-парсингу даних, роботи з кукі, логування та 
-рендерингу шаблонів, а також налаштовує статичні 
+парсингу даних, роботи з кукі, логування та
+рендерингу шаблонів, а також налаштовує статичні
 файли та унікальні ідентифікатори запитів.
 */
