@@ -5,8 +5,8 @@ import { isNotAuthorized, isAuthorized, generateToken, sendEmail, parseToken, __
 import Models from '../../models/index.js';
 
 const router = express.Router();
-
-router.post('/login', isNotAuthorized, function(req, res) { // Маршрут для входу користувача
+// Маршрут для входу користувача
+router.post('/login', isNotAuthorized, function(req, res) {
   const { email, password } = req.body; // Отримання email та пароля з тіла запиту
 
   Models.User.findOne({ where: { email } }).then((user) => { // Пошук користувача за email
@@ -26,8 +26,8 @@ router.post('/login', isNotAuthorized, function(req, res) { // Маршрут д
     }
   });
 });
-
-router.post('/refresh', isAuthorized, function(req, res) { // Маршрут для оновлення токена
+// Маршрут для оновлення токена
+router.post('/refresh', isAuthorized, function(req, res) {
   Models.User.findOne({ where: { id: 1 } }).then((user) => { // Пошук користувача за id
     if (!user) return res.status(404).json({ message: 'User not found' }); // Користувача не знайдено
 
@@ -36,8 +36,8 @@ router.post('/refresh', isAuthorized, function(req, res) { // Маршрут д�
     });
   });
 });
-
-router.post('/create', isNotAuthorized, function(req, res) { // Маршрут для створення користувача
+// Маршрут для створення користувача
+router.post('/create', isNotAuthorized, function(req, res) {
   const { email, password, first_name, last_name, birthday } = req.body; // Отримання email та пароля з тіла запиту
 
   Models.User.create({ email, password, first_name, last_name, birthday }).then((user) => { // Створення користувача
@@ -57,8 +57,8 @@ router.post('/create', isNotAuthorized, function(req, res) { // Маршрут �
     res.status(500).json({ message: 'Unable to create user', details: error.errors.map((error) => error.message) }); // Помилка створення користувача
   });
 });
-
-router.get('/approve-email', isNotAuthorized, function(req, res) { // Маршрут для підтвердження користувача
+// Маршрут для підтвердження користувача
+router.get('/approve-email', isNotAuthorized, function(req, res) {
   const { token } = req.query;
 
   parseToken(token)

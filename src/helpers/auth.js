@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { parseToken } from './parseToken.js'; // Імпорт функції для розбору токена
-
-export const isAuthorized = (req, res, next) => { // Функція для перевірки авторизації
+// Функція для перевірки авторизації
+export const isAuthorized = (req, res, next) => {
   const [text, token] = req.headers.authorization.split(' ');
 
   if(text !== 'Bearer') {
@@ -13,8 +13,8 @@ export const isAuthorized = (req, res, next) => { // Функція для пе�
     next();
   }).catch((error)=>res.status(403).json({ message: 'Access denied' }));
 }
-
-export const isNotAuthorized = (req, res, next) => { // Функція для перевірки відсутності авторизації
+// Функція для перевірки відсутності авторизації
+export const isNotAuthorized = (req, res, next) => {
   const { authorization } = req.headers;
 
   if(authorization) {
