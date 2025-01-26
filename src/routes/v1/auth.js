@@ -43,7 +43,7 @@ router.post('/create', isNotAuthorized, function(req, res) {
   Models.User.create({ email, password, first_name, last_name, birthday }).then((user) => { // Створення користувача
     generateToken(user.id, '1h')
       .then((token) => fs.readFile(path.join(__dirname, '../views/emails/approve-email.html'), 'utf8')
-      .then((html) => html.replace('APPROVE_EMAIL', `http://localhost:8080/api/v1/auth/approve-email?token=${token}`)))
+      .then((html) => html.replace('APPROVE_EMAIL', `http://localhost:8080/api/v1/auth/create/approve-email?token=${token}`)))
       .then((html) => sendEmail({
         to: email,
         subject: 'Welcome to our service',
@@ -58,7 +58,7 @@ router.post('/create', isNotAuthorized, function(req, res) {
   });
 });
 // Маршрут для підтвердження користувача
-router.get('/approve-email', isNotAuthorized, function(req, res) {
+router.get('/create/approve-email', isNotAuthorized, function(req, res) {
   const { token } = req.query;
 
   parseToken(token)
@@ -71,4 +71,38 @@ router.get('/approve-email', isNotAuthorized, function(req, res) {
     });
 });
 
+router.post('/forgot-password', isNotAuthorized, function(req, res){
+  const {email, redirect} = req.body;
+
+  Models.User.findOne({ where: { email } }).then((user) => {
+    generateToken(user.id, '1h')
+    .then((token) => fs.readFile(path.join(__dirname, '../views/emails/approve-email.html'), 'utf8')
+    .then((html) => html.replace('APPROVE_EMAIL', `${redirect}?token=${token}`)))
+    .then((html) => sendEmail({
+      to: email,
+      subject: 'Do you wont reset password?',
+      html,
+    })
+    ).then(() => {
+      res.status(200).json({message: `Please confirm your email ${email}`})
+    }).catch((error) => {
+      res.status(400).json({message: 'Can not send email'})
+    });
+  }).catch((error) => {
+  res.status(404).json({message: `User with email ${email} not found`})
+});
+});
+
+router.post('/forgot-password/approve-email', isAuthorized, function(req, res){
+//перегенерувати токен для user, час життя токену (30m)
+})
+
+router.post('/forgot-password/set-password', isAuthorized, function(req, res){
+  const {id} = req.auth;
+  const {password} = req.body;
+
+  Models.User.update({ password }, { where: { id } }).then(() => {
+    res.status(200).json({message: 'Password successfully set'})
+  }).catch((error) => {res.status(400).json({message: 'Unable to set new password'})})
+})
 export const auth = router;

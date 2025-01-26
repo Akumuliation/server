@@ -9,6 +9,7 @@ export const isAuthorized = (req, res, next) => {
   }
 
   parseToken(token).then((decodedToken) => {
+    req.auth = decodedToken
     console.log('decodedToken', decodedToken);
     next();
   }).catch((error)=>res.status(403).json({ message: 'Access denied' }));
