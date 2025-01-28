@@ -10,4 +10,4 @@ export const generateToken = (id, lifetime) => new Promise((resolve, reject) => 
       resolve(token);
     }
   });
-})
+});

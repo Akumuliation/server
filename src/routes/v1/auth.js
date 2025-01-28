@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'path';
 import { isNotAuthorized, isAuthorized, generateToken, sendEmail, parseToken, __dirname } from '../../helpers/index.js';
 import Models from '../../models/index.js';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 // Маршрут для входу користувача
@@ -68,9 +69,9 @@ router.get('/create/approve-email', isNotAuthorized, function(req, res) {
     })
     .catch(() => {
       res.status(500).json({ message: 'Unable to approve user' });
-    });
+  });
 });
-
+// Маршрут для відновлення пароля
 router.post('/forgot-password', isNotAuthorized, function(req, res){
   const {email, redirect} = req.body;
 
@@ -90,19 +91,30 @@ router.post('/forgot-password', isNotAuthorized, function(req, res){
     });
   }).catch((error) => {
   res.status(404).json({message: `User with email ${email} not found`})
+  });
 });
-});
-
+// Маршрут для підтвердження email для відновлення пароля
 router.post('/forgot-password/approve-email', isAuthorized, function(req, res){
-//перегенерувати токен для user, час життя токену (30m)
-})
-
+  //перегенерувати токен для user, час життя токену (30m)
+  jwt.sign({
+      email: user.email,
+    }, process.env.JWT_SECRET, { expiresIn: '30m' }, (error, token) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(token);
+      }
+  });
+});
+// Маршрут для встановлення нового пароля
 router.post('/forgot-password/set-password', isAuthorized, function(req, res){
   const {id} = req.auth;
   const {password} = req.body;
 
   Models.User.update({ password }, { where: { id } }).then(() => {
     res.status(200).json({message: 'Password successfully set'})
-  }).catch((error) => {res.status(400).json({message: 'Unable to set new password'})})
-})
+  }).catch((error) => {res.status(400).json({message: 'Unable to set new password'})
+  });
+});
+
 export const auth = router;
