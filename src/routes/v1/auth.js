@@ -94,17 +94,16 @@ router.post('/forgot-password', isNotAuthorized, function(req, res){
   });
 });
 // Маршрут для підтвердження email для відновлення пароля
+// перегенерувати токен для user, час життя токену (30m)
 router.post('/forgot-password/approve-email', isAuthorized, function(req, res){
-  //перегенерувати токен для user, час життя токену (30m)
-  const {user} = req.auth;
+  const {user} = req.body;
   
-  jwt.sign({
-     email: user.email 
-    }, process.env.JWT_SECRET, { expiresIn: '30m' }, (error, token) => {
+  jwt.sign({ email: user.email }, process.env.JWT_SECRET, 
+    { expiresIn: '30m' }, (error, token) => {
       if (error) {
-        res.status(500).json({ message: 'Unable to generate token' });
+        res.status(500).json({ message: 'Token generation failed' });
       } else {
-        resolve(token);
+        res.json({ token });
       }
   });
 });
