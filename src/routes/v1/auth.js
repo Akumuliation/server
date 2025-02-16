@@ -3,7 +3,6 @@ import fs from 'node:fs/promises';
 import path from 'path';
 import { isNotAuthorized, isAuthorized, generateToken, sendEmail, parseToken, __dirname } from '../../helpers/index.js';
 import Models from '../../models/index.js';
-import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 // Маршрут для входу користувача
@@ -96,16 +95,10 @@ router.post('/forgot-password', isNotAuthorized, function(req, res){
 // Маршрут для підтвердження email для відновлення пароля
 // перегенерувати токен для user, час життя токену (30m)
 router.post('/forgot-password/approve-email', isAuthorized, function(req, res){
-  const {user} = req.body;
-  
-  jwt.sign({ email: user.email }, process.env.JWT_SECRET, 
-    { expiresIn: '30m' }, (error, token) => {
-      if (error) {
-        res.status(500).json({ message: 'Token generation failed' });
-      } else {
-        res.json({ token });
-      }
-  });
+  const {id} = req.auth;
+  generateToken(user.id, '30m')
+  .then((token)=>res.json({ token }))
+  .catch(()=> res.status(500).json({ message: 'Token generation failed' }))
 });
 // Маршрут для встановлення нового пароля
 router.post('/forgot-password/set-password', isAuthorized, function(req, res){
