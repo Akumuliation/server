@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuthorized } from '../../helpers';
+import {isAuthorized } from '../../helpers/index.js';
 import Models from '../../models/index.js';
 
 const router = express.Router();
