@@ -62,11 +62,16 @@ router.get('/create/approve-email', isNotAuthorized, function(req, res) {
   const { token } = req.query;
 
   parseToken(token)
+  .then((parsedToken) => {
+    console.log('Token is valid', parsedToken);
+    return parsedToken;
+  })
     .then(({ id }) => Models.User.update({ approved: true }, { where: { id } }))
     .then(() => {
       res.json({ message: 'User approved successfully' });
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log('Token is invalid', error);
       res.status(500).json({ message: 'Unable to approve user' });
   });
 });
