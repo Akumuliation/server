@@ -10,5 +10,5 @@ router.get('/', isAuthorized, isAprroved, function(req, res){
             res.setHeader("x-total-count", count).json(users); //ліміт
       }).catch(()=> res.status(500).json({ message: 'Fail to find Users' })); // помилка
 });
-// зробити start і end
+// зробити start і end для users
 export const users = router;
