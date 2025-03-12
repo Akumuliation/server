@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { parseToken } from './parseToken.js'; // Імпорт функції для розбору токена
 import Models from '../models/index.js';
 // Функція для перевірки авторизації
