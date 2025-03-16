@@ -1,14 +1,8 @@
 import express from 'express';
-import { app, isAprroved, isAuthorized } from '../../helpers/index.js';
+import { isAprroved, isAuthorized, convertStartEndToLimitOffset} from '../../helpers/index.js';
 import Models from '../../models/index.js';
 
 const router = express.Router();
-
-function convertStartEndToLimitOffset (start, end){
-      const limit = end - start;
-      const offset = start;
-      return { limit, offset };
-}
 
 router.get('/', isAuthorized, isAprroved, function(req, res){
       const { approved = true, start = 0, end = 20 } = req.query;
@@ -18,7 +12,7 @@ router.get('/', isAuthorized, isAprroved, function(req, res){
       }).catch(()=> res.status(500).json({ message: 'Fail to find Users' }));
       }
 );
-// зробити start і end для users
+// зробити сортування asc/desc, по імені, по email, по даті реєстрації, дні народження
 export const users = router;
 
 
