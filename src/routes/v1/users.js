@@ -12,12 +12,16 @@ router.get('/', isAuthorized, isAprroved, function(req, res){
       }).catch(()=> res.status(500).json({ message: 'Fail to find Users' }));
       }
 );
-      Models.User.findAll({
+
+router.get('first_name', isAuthorized, isAprroved, function(req, res){
+      const { first_name } = req.query;
+      Models.User.findAll({first_name}
             order: [
                   ['first_name', 'ASC'],
-                  ['last_name', 'ASC'],
             ],
-      }) // id, first_name, last_name, email, birthday, approved
+      )
+)
+//  first_name, last_name, email, birthday, approved
 // зробити сортування asc/desc, по імені, по email, по даті реєстрації, дні народження
 
 export const users = router;
