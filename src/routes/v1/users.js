@@ -13,17 +13,15 @@ router.get('/', isAuthorized, isAprroved, function(req, res){
       }).catch(() => res.status(500).json({ message: 'Fail to find Users' }));
       }
 );
-router.get('first_name', isAuthorized, isAprroved, function(req, res){
-      const { first_name } = req.query;
-      Models.User.findAll({ 
-            where: { first_name },
-            order: [['first_name', 'ASC']]
+router.get('/:user/:ascdesc', isAuthorized, isAprroved, function(req, res){
+      const { user, ascdesc } = req.params;
+      User.findAll({
+            order: [[ user, ascdesc ]]
       }).then(users => {
-            res.setHeader("x-total-count", count).json(users);
-      }).catch(() => res.status(500).json({ message: 'Fail to find Users' }));
+            res.json(users);
+      }).catch(() => res.status(500).json({ message: `Fail to filter users ${user}` }));
 });
 
-      
 //  first_name, last_name, email, birthday, approved
 // зробити сортування asc/desc, по імені, по email, по даті реєстрації, дні народження
 
