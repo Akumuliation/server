@@ -13,13 +13,13 @@ router.get('/', isAuthorized, isAprroved, function(req, res){
       }).catch(() => res.status(500).json({ message: 'Fail to find Users' }));
       }
 );
-router.get('/:user/:ascdesc', isAuthorized, isAprroved, function(req, res){
-      const { user, ascdesc } = req.params;
+router.get('/:name/:filter', isAuthorized, isAprroved, function(req, res){
+      const { name, filter } = req.params;
       User.findAll({
-            order: [[ user, ascdesc ]]
+            order: [[ name, filter ]]
       }).then(users => {
             res.json(users);
-      }).catch(() => res.status(500).json({ message: `Fail to filter users ${user}` }));
+      }).catch(() => res.status(500).json({ message: `Fail to filter ${name, filter}` }));
 });
 
 //  first_name, last_name, email, birthday, approved
