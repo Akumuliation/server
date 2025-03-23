@@ -20,7 +20,7 @@ export const isNotAuthorized = (req, res, next) => {
   const { authorization } = req.headers;
 
   if(authorization) {
-    res.status(403).json({ message: 'Access denied' });
+    res.status(403).json({ message: 'User is Not Authorized' });
   } else {
     next();
   }

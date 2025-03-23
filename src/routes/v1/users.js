@@ -19,7 +19,9 @@ router.get('/:name/:filter', isAuthorized, isAprroved, function(req, res){
             order: [[ name, filter ]]
       }).then(users => {
             res.json(users);
-      }).catch(() => res.status(500).json({ message: `Fail to filter ${name}` }));
+      }).catch(() => res.status(500).json({ message: `Fail to filter ${name} use list of this
+             "id", "first_name", "last_name", "email", "birthday", 
+             "approved", "password", "createdAt", "updatedAt"` }));
 });
 
 //  first_name, last_name, email, birthday, approved

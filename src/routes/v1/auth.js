@@ -98,7 +98,6 @@ router.post('/forgot-password', isNotAuthorized, function(req, res){
   });
 });
 // Маршрут для підтвердження email для відновлення пароля
-// перегенерувати токен для user, час життя токену (30m)
 router.post('/forgot-password/approve-email', isAuthorized, function(req, res){
   const {id} = req.auth;
   generateToken(user.id, '30m')
@@ -111,7 +110,7 @@ router.post('/forgot-password/set-password', isAuthorized, function(req, res){
   const {password} = req.body;
 
   Models.User.update({ password }, { where: { id } }).then(() => {
-    res.status(200).json({message: 'Password successfully set'})
+    res.status(200).json({message: 'Password successfully updated'})
   }).catch((error) => {res.status(400).json({message: 'Unable to set new password'})
   });
 });

@@ -50,10 +50,8 @@ export class User extends Model {
 
     User.authenticate = function(password, user) { // Метод для аутентифікації користувача
       if(!user) return false; // Якщо користувача не знайдено, повернути false
-
       return bcrypt.compareSync(password, user.password);
     };
-
     return User;
   }
 }
