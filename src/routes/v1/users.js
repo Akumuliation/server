@@ -2,6 +2,7 @@ import express from 'express';
 import { isAprroved, isAuthorized, convertStartEndToLimitOffset} from '../../helpers/index.js';
 import Models from '../../models/index.js';
 import { User } from '../../models/user.js';
+import { Op } from 'sequelize';
 
 const router = express.Router();
 
@@ -20,6 +21,17 @@ router.get('/:name/:filter', isAuthorized, isAprroved, function(req, res){
       }).then(users => {
             res.json(users);
       }).catch(() => res.status(500).json({ message: `Fail to filter ${name} use list of this id, first_name, last_name, email, birthday, approved, password, createdAt, updatedAt` }));
+});
+
+router.get('/filter-by/:names/:letter', isAuthorized, isAprroved, async (req, res) => {
+  const { names, letter } = req.params;
+      User.findAll({
+      where: {
+            [names]: {
+            [Op.like]: `${letter}%`
+      }}}).then(users => {
+            res.json(users);
+      }).catch(() => res.status(500).json({ message: `Failed to filter users` }));
 });
 
 //  first_name, last_name, email, birthday, approved
