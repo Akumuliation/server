@@ -24,7 +24,7 @@ router.get('/:name/:filter', isAuthorized, isAprroved, function(req, res){
 });
 
 router.get('/filter-by/:names/:letter', isAuthorized, isAprroved, async (req, res) => {
-  const { names, letter } = req.params;
+      const { names, letter } = req.params;
       User.findAll({
       where: {
             [names]: {
