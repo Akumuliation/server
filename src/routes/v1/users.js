@@ -14,21 +14,21 @@ router.get('/', isAuthorized, isAprroved, function(req, res){
       }).catch(() => res.status(500).json({ message: 'Fail to find Users' }));
       }
 );
-router.get('/:name/:filter', isAuthorized, isAprroved, function(req, res){
-      const { name, filter } = req.params;
+router.get('/:name/:ASCDESC', isAuthorized, isAprroved, function(req, res){
+      const { name, ASCDESC } = req.params;
       User.findAll({
-            order: [[ name, filter ]]
+            order: [[ name, ASCDESC ]]
       }).then(users => {
             res.json(users);
       }).catch(() => res.status(500).json({ message: `Fail to sort ${name} use list of this id, first_name, last_name, email, birthday, approved, password, createdAt, updatedAt` }));
 });
 
-router.get('/filter-by/:names/:letter', isAuthorized, isAprroved, async (req, res) => {
-      const { names, letter } = req.params;
+router.get('/filter-by/:names/:search', isAuthorized, isAprroved, async (req, res) => {
+      const { names, search } = req.params;
       User.findAll({
       where: {
             [names]: {
-            [Op.like]: `${letter}%`
+            [Op.like]: `${search}%`
       }}}).then(users => {
             res.json(users);
       }).catch(() => res.status(500).json({ message: `Failed to filter users` }));
